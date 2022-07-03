@@ -1,0 +1,76 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.1'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+dependencies {
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+allprojects {
+	group = 'com.study'
+	version = '0.0.1-SNAPSHOT'
+	sourceCompatibility = '11'
+
+	repositories {
+		mavenCentral()
+	}
+}
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	dependencies {
+		testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+		testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+	}
+}
+
+project(':adapter-module') {
+	dependencies {
+		implementation project(':application-module')
+
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		runtimeOnly 'com.h2database:h2'
+
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
+	}
+
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
+}
+
+project(':application-module') {
+	dependencies {
+		implementation project(':domain-module')
+
+		implementation 'org.springframework.boot:spring-boot-starter'
+		implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
+	}
+
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
+}
+
+project(':domain-module') {
+	bootJar {
+		enabled = false
+	}
+	jar {
+		enabled = true
+	}
+}

@@ -1,0 +1,5 @@
+rootProject.name = 'hexagonal-architecture-cqrs-jpa-multimodule-example'
+include 'adapter-module'
+include 'application-module'
+include 'domain-module'
+
